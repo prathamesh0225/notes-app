@@ -7,7 +7,7 @@ public class ConfigReader {
     private static final Properties props = new Properties();
     static {
         try {
-            InputStream input = ConfigReader.class.getClassLoader().getResourceAsStream("config.properties");
+            InputStream input = ConfigReader.class.getClassLoader().getResourceAsStream("config.properties.example");
             props.load(input);
         } catch (Exception e) {
             throw new RuntimeException(e);
