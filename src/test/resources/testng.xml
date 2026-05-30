@@ -1,0 +1,29 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+
+<suite name="CapstoneSuite" parallel="classes" thread-count="3">
+
+    <listeners>
+        <listener class-name="utils.TestListener"/>
+    </listeners>
+
+    <test name="Tests">
+
+        <classes>
+
+            <class name="tests.ui.LoginTest"/>
+            <class name="tests.ui.CreateNoteTest"/>
+            <class name="tests.ui.DeleteNoteTest"/>
+            <class name="tests.ui.EditNoteTest"/>
+            
+            <class name="tests.api.AuthApiTest"/>
+            <class name="tests.api.NotesApiTest"/>
+            
+            <class name="tests.e2e.UiToApiTest"/>
+            <class name="tests.e2e.ApiToUiTest"/>
+           
+
+        </classes>
+
+    </test>
+
+</suite>
