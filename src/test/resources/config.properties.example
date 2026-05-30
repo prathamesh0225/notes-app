@@ -1,0 +1,6 @@
+baseUrl=https://practice.expandtesting.com/notes/app
+apiBaseUrl=https://practice.expandtesting.com/notes/api
+browser=chrome
+email=YOUR_EMAIL
+password=YOUR_PASSWORD
+gemini.api.key=YOUR_GEMINI_KEY
