@@ -44,7 +44,6 @@ pipeline {
         }
 
     }
-}
 
 post {
 
@@ -85,5 +84,6 @@ post {
         failure {
             echo 'Build failed'
         }
+    }
 }
 
