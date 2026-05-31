@@ -5,9 +5,9 @@ pipeline {
         BASE_URL = 'https://practice.expandtesting.com/notes/app'
         API_BASE_URL = 'https://practice.expandtesting.com/notes/api'
         BROWSER = 'chrome'
-        NOTES_EMAIL = credentials('NOTES_EMAIL')
-        NOTES_PASSWORD = credentials('NOTES_PASSWORD')
-        GEMINI_API_KEY = credentials('GEMINI_API_KEY')
+        NOTES_EMAIL = credentials('email')
+        NOTES_PASSWORD = credentials('password')
+        GEMINI_API_KEY = credentials('gemini-api-key')
     }
 
     stages {
