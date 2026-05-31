@@ -11,6 +11,7 @@ pipeline {
     }
 
     stages {
+
         stage('Checkout') {
             steps {
                 git branch: 'main', url: 'https://github.com/prathamesh0225/notes-app.git'
@@ -25,22 +26,18 @@ pipeline {
 
         stage('Test') {
             steps {
-                    catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
+                catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
                     bat 'mvn test'
                 }
             }
         }
 
         stage('Publish Allure') {
-
             steps {
-
                 allure(
                     includeProperties: false,
-
                     jdk: '',
-
-                    results: [[path:'target/allure-results']]
+                    results: [[path: 'target/allure-results']]
                 )
             }
         }
@@ -62,7 +59,7 @@ pipeline {
         stage('Generate JMeter HTML Report') {
             steps {
                 bat '''
-                rmdir /s /q report
+                if exist report rmdir /s /q report
 
                 jmeter -g performance/results/result.jtl ^
                 -o report
@@ -82,21 +79,21 @@ pipeline {
                 ])
             }
         }
+    }
 
-post {
-
+    post {
         always {
 
             echo 'Archiving screenshots...'
-            archiveArtifacts(artifacts: 'target/screenshots/**', allowEmptyArchive: true)
+            archiveArtifacts artifacts: 'target/screenshots/**', allowEmptyArchive: true
 
             echo 'Archiving Allure results...'
-            archiveArtifacts(artifacts: 'allure-results/**',allowEmptyArchive: true)
+            archiveArtifacts artifacts: 'allure-results/**', allowEmptyArchive: true
 
             echo 'Archiving surefire reports...'
-            archiveArtifacts(artifacts: 'target/surefire-reports/**',allowEmptyArchive: true)
+            archiveArtifacts artifacts: 'target/surefire-reports/**', allowEmptyArchive: true
 
-            junit(testResults: 'target/surefire-reports/*.xml', allowEmptyResults: true)
+            junit testResults: 'target/surefire-reports/*.xml', allowEmptyResults: true
 
             echo 'Archiving JMeter results and report...'
             archiveArtifacts artifacts: 'performance/results/*.jtl', allowEmptyArchive: true
@@ -106,12 +103,13 @@ post {
         success {
             echo 'Build passed'
         }
+
         unstable {
             echo 'Some tests failed'
         }
+
         failure {
             echo 'Build failed'
         }
     }
 }
-
