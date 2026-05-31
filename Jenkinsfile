@@ -25,26 +25,32 @@ pipeline {
 
         stage('Test') {
             steps {
+                    catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
                     bat 'mvn test'
+                }
             }
         }
         stage('Run JMeter Test') {
             steps {
-                bat '''
-                jmeter -n ^
-                -t performance/notes-performance.jmx ^
-                -l performance/results/result.jtl
-                '''
+                catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
+                    bat '''
+                    jmeter -n ^
+                    -t performance/notes-performance.jmx ^
+                    -l performance/results/result.jtl
+                    '''
+                }
             }
         }
 
         stage('Generate HTML Report') {
             steps {
-                bat '''
-                rmdir /s /q report
-                jmeter -g performance/results/result.jtl ^
-                -o report
-                '''
+                catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
+                    bat '''
+                    if exist report rmdir /s /q report
+                    jmeter -g performance/results/result.jtl ^
+                    -o report
+                    '''
+                }
             }
         }
 
