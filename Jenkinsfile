@@ -75,7 +75,7 @@ pipeline {
                 publishHTML([
                     reportDir: 'report',
                     reportFiles: 'index.html',
-            r        eportName: 'JMeter Report',
+                    reportName: 'JMeter Report',
                     keepAll: true,
                     alwaysLinkToLastBuild: true,
                     allowMissing: true
