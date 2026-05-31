@@ -28,6 +28,26 @@ pipeline {
                     bat 'mvn test'
             }
         }
+        stage('Run JMeter Test') {
+            steps {
+                bat '''
+                jmeter -n ^
+                -t performance/notes-performance.jmx ^
+                -l performance/results/result.jtl
+                '''
+            }
+        }
+
+        stage('Generate HTML Report') {
+            steps {
+                bat '''
+                rmdir /s /q report
+                jmeter -g performance/results/result.jtl ^
+                -o report
+                '''
+            }
+        }
+
 
         stage('Publish Allure') {
 
@@ -51,29 +71,19 @@ post {
         always {
 
             echo 'Archiving screenshots...'
-            archiveArtifacts(
-                artifacts: 'target/screenshots/**',
-                allowEmptyArchive: true
-            )
+            archiveArtifacts(artifacts: 'target/screenshots/**', allowEmptyArchive: true)
 
             echo 'Archiving Allure results...'
-
-            archiveArtifacts(
-                artifacts: 'allure-results/**',
-                allowEmptyArchive: true
-            )
+            archiveArtifacts(artifacts: 'allure-results/**',allowEmptyArchive: true)
 
             echo 'Archiving surefire reports...'
+            archiveArtifacts(artifacts: 'target/surefire-reports/**',allowEmptyArchive: true)
 
-            archiveArtifacts(
-                artifacts: 'target/surefire-reports/**',
-                allowEmptyArchive: true
-            )
+            junit(testResults: 'target/surefire-reports/*.xml', allowEmptyResults: true)
 
-            junit(
-                testResults: 'target/surefire-reports/*.xml',
-                allowEmptyResults: true
-            )
+            echo 'Archiving JMeter results and report...'
+            archiveArtifacts artifacts: 'performance/results/*.jtl', allowEmptyArchive: true
+            archiveArtifacts artifacts: 'report/**', allowEmptyArchive: true
         }
 
         success {
