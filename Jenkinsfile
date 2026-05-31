@@ -46,7 +46,7 @@ pipeline {
         }
 
         stage('Run JMeter Test') {
-    s        teps {
+            steps {
                 bat '''
                 if not exist performance\\results mkdir performance\\results
 
