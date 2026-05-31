@@ -1,10 +1,6 @@
 pipeline {
     agent any
 
-    options {
-        skipDefaultCheckout(true)
-    }
-
     environment {
         BASE_URL = 'https://practice.expandtesting.com/notes/app'
         API_BASE_URL = 'https://practice.expandtesting.com/notes/api'
