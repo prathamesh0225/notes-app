@@ -31,18 +31,6 @@ pipeline {
             }
         }
 
-        stage('Generate JMeter HTML Report') {
-            steps {
-                catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
-                    bat '''
-                    if exist report rmdir /s /q report
-                    if exist performance\\results\\result.jtl ( jmeter -g performance/results/result.jtl -o report) 
-                    else (echo "JTL file not found - skipping report generation")
-                    '''
-                }
-            }
-        }
-
         stage('Publish Allure') {
 
             steps {
@@ -57,20 +45,43 @@ pipeline {
             }
         }
 
+        stage('Run JMeter Test') {
+    s        teps {
+                bat '''
+                if not exist performance\\results mkdir performance\\results
+
+                del /f /q performance\\results\\result.jtl
+
+                jmeter -n ^
+                -t performance/notes-performance.jmx ^
+                -l performance/results/result.jtl
+                '''
+            }
+        }
+
+        stage('Generate JMeter HTML Report') {
+            steps {
+                bat '''
+                rmdir /s /q report
+
+                jmeter -g performance/results/result.jtl ^
+                -o report
+                '''
+            }
+        }
+
         stage('Publish Report') {
             steps {
                 publishHTML([
                     reportDir: 'report',
                     reportFiles: 'index.html',
-                    reportName: 'JMeter Report',
+            r        eportName: 'JMeter Report',
                     keepAll: true,
                     alwaysLinkToLastBuild: true,
                     allowMissing: true
                 ])
             }
         }
-
-    }
 
 post {
 
