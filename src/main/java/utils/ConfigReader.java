@@ -1,21 +1,37 @@
 package utils;
 
-import java.io.InputStream;
-import java.util.Properties;
+import java.util.Map;
 
 public class ConfigReader {
-    private static final Properties props = new Properties();
-    static {
-        try {
-            InputStream input = ConfigReader.class.getClassLoader().getResourceAsStream("config.properties.example");
-            props.load(input);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
 
-    public static String getProperty(String key) {
-        String env = System.getenv(key.toUpperCase().replace(".", "_"));
-        return env != null ? env : props.getProperty(key);
+    private static final Map<String,String> keys =
+            Map.of(
+                    "baseUrl","BASE_URL",
+                    "apiBaseUrl","API_BASE_URL",
+                    "browser","BROWSER",
+                    "email","NOTES_EMAIL",
+                    "password","NOTES_PASSWORD",
+                    "gemini.api.key",
+                    "GEMINI_API_KEY"
+            );
+
+    public static String get(String key) {
+
+        String env =
+                keys.get(key);
+
+        String value =
+                System.getenv(env);
+
+        if (value == null ||
+                value.isBlank()) {
+
+            throw new RuntimeException(
+                    "Missing env variable: "
+                            + env
+            );
+        }
+
+        return value;
     }
 }
