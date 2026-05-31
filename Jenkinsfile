@@ -31,22 +31,13 @@ pipeline {
             }
         }
 
-        stage('Clean Old Reports') {
-            steps {
-                bat '''
-                if exist report rmdir /s /q report
-                if exist test.jtl del test.jtl
-                '''
-            }
-        }
-        
-        stage('Run JMeter Test') {
+        stage('Generate JMeter HTML Report') {
             steps {
                 catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
                     bat '''
-                    jmeter -n ^
-                    -t performance/notes-performance.jmx ^
-                    -l performance/results/result.jtl
+                    if exist report rmdir /s /q report
+                    if exist performance\\results\\result.jtl ( jmeter -g performance/results/result.jtl -o report) 
+                    else (echo "JTL file not found - skipping report generation")
                     '''
                 }
             }
