@@ -15,7 +15,7 @@ public class ScreenshotUtils {
 
         File src = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
 
-        String path = "screenshots/" + testName + "_" + System.currentTimeMillis() + ".png";
+        String path = "target/screenshots/" + testName + "_" + System.currentTimeMillis() + ".png";
 
         try {
 

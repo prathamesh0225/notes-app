@@ -25,13 +25,7 @@ pipeline {
 
         stage('Test') {
             steps {
-                catchError(
-                    buildResult: 'UNSTABLE',
-                    stageResult: 'FAILURE'
-                ) {
-
                     bat 'mvn test'
-                }
             }
         }
 
@@ -44,13 +38,52 @@ pipeline {
 
                     jdk: '',
 
-                    results: [[
-                        path:
-                        'target/allure-results'
-                    ]]
+                    results: [[path:'target/allure-results']]
                 )
             }
         }
 
     }
 }
+
+post {
+
+        always {
+
+            echo 'Archiving screenshots...'
+            archiveArtifacts(
+                artifacts: 'target/screenshots/**',
+                allowEmptyArchive: true
+            )
+
+            echo 'Archiving Allure results...'
+
+            archiveArtifacts(
+                artifacts: 'allure-results/**',
+                allowEmptyArchive: true
+            )
+
+            echo 'Archiving surefire reports...'
+
+            archiveArtifacts(
+                artifacts: 'target/surefire-reports/**',
+                allowEmptyArchive: true
+            )
+
+            junit(
+                testResults: 'target/surefire-reports/*.xml',
+                allowEmptyResults: true
+            )
+        }
+
+        success {
+            echo 'Build passed'
+        }
+        unstable {
+            echo 'Some tests failed'
+        }
+        failure {
+            echo 'Build failed'
+        }
+}
+

@@ -2,8 +2,7 @@ package utils;
 
 import drivers.DriverManager;
 import io.qameta.allure.Allure;
-import org.openqa.selenium.OutputType;
-import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.WebDriver;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
 import org.testng.ITestContext;
@@ -23,10 +22,12 @@ public class TestListener implements ITestListener {
     public void onTestFailure(ITestResult result) {
 
         try {
+            WebDriver driver = DriverManager.getDriver();
             Allure.step("FAILED: " + result.getMethod().getMethodName());
-            byte[] screenshot = ((TakesScreenshot) DriverManager.getDriver()).getScreenshotAs(OutputType.BYTES);
+            String screenshotPath = ScreenshotUtils.captureScreenshot(driver, result.getMethod().getMethodName());
+            byte[] screenshot = ScreenshotUtils.captureScreenshotBytes(driver);
             Allure.addAttachment("Failure Screenshot",new ByteArrayInputStream(screenshot));
-
+            Allure.addAttachment("Saved Screenshot Path", screenshotPath);
             if (result.getThrowable() != null) {
                 Allure.addAttachment("Error Stacktrace",result.getThrowable().toString());
             }
