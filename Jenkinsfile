@@ -10,12 +10,12 @@ pipeline {
 
         NOTES_EMAIL =
             credentials(
-                'notes-email'
+                'email'
             )
 
         NOTES_PASSWORD =
             credentials(
-                'notes-password'
+                'password'
             )
     }
 
