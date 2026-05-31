@@ -9,7 +9,7 @@ public class BaseTest {
     @BeforeMethod
     public void setUp() {
         driver = new SelfHealingDriver(DriverManager.getDriver());
-        driver.get(ConfigReader.getProperty("baseUrl"));
+        driver.get(ConfigReader.get("BASE_URL"));
     }
 
     @AfterMethod

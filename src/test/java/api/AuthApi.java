@@ -13,10 +13,10 @@ import base.BaseApiTest;
 public class AuthApi extends BaseApiTest {
     public static String getAuthToken() {
 
-        baseURI = ConfigReader.getProperty("apiBaseUrl");
+        baseURI = ConfigReader.get("API_BASE_URL");
         Map<String, String> body = new HashMap<>();
-        body.put("email", ConfigReader.getProperty("email"));
-        body.put("password", ConfigReader.getProperty("password"));
+        body.put("email", ConfigReader.get("NOTES_EMAIL"));
+        body.put("password", ConfigReader.get("NOTES_PASSWORD"));
 
         Response response = given()
                         .header("Content-Type","application/json")

@@ -26,6 +26,7 @@ public class DeleteNoteTest extends AuthenticatedBaseTest {
         
         Thread.sleep(2000);
         driver.navigate().refresh();
+        Thread.sleep(2000);
         Assert.assertFalse(notesPage.isNotePresent(title),"Note still found after delete");
     }
 }

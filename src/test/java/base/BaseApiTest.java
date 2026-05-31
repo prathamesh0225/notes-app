@@ -8,6 +8,6 @@ public class BaseApiTest {
     public static String noteId;
     @BeforeClass
     public static void setupApi() {
-        RestAssured.baseURI = ConfigReader.getProperty("apiBaseUrl");
+        RestAssured.baseURI = ConfigReader.get("API_BASE_URL");
     }
 }

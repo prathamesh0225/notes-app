@@ -1,34 +1,24 @@
 package utils;
 
-import java.util.Map;
+import io.github.cdimascio.dotenv.Dotenv;
 
 public class ConfigReader {
 
-    private static final Map<String,String> keys =
-            Map.of(
-                    "baseUrl","BASE_URL",
-                    "apiBaseUrl","API_BASE_URL",
-                    "browser","BROWSER",
-                    "email","NOTES_EMAIL",
-                    "password","NOTES_PASSWORD",
-                    "gemini.api.key",
-                    "GEMINI_API_KEY"
-            );
+    private static final Dotenv dotenv =
+            Dotenv.configure()
+                    .ignoreIfMissing()
+                    .load();
 
     public static String get(String key) {
 
-        String env =
-                keys.get(key);
-
         String value =
-                System.getenv(env);
+                dotenv.get(key);
 
         if (value == null ||
                 value.isBlank()) {
 
             throw new RuntimeException(
-                    "Missing env variable: "
-                            + env
+                    "Missing key: " + key
             );
         }
 

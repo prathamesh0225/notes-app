@@ -12,8 +12,8 @@ public class AuthenticatedBaseTest extends BaseTest {
 
         LoginPage loginPage = new LoginPage(driver);
         loginPage.openLoginPage();
-        loginPage.enterEmail(ConfigReader.getProperty("email"));
-        loginPage.enterPassword(ConfigReader.getProperty("password"));
+        loginPage.enterEmail(ConfigReader.get("NOTES_EMAIL"));
+        loginPage.enterPassword(ConfigReader.get("NOTES_PASSWORD"));
         loginPage.clickLogin();
         notesPage = new NotesPage(driver);
     }

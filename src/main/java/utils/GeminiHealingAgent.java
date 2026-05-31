@@ -19,7 +19,7 @@ import java.util.List;
 
 public class GeminiHealingAgent {
 
-    private static final String API_KEY = ConfigReader.getProperty("gemini.api.key");
+    private static final String API_KEY = ConfigReader.get("GEMINI_API_KEY");
 
     static { 
         System.out.println("Gemini key loaded = " + API_KEY);

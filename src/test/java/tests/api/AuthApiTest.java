@@ -15,10 +15,10 @@ public class AuthApiTest extends BaseApiTest {
     public void loginApiTest() {
         String payload = "{"
                                     + "\"email\":\""
-                                    + ConfigReader.getProperty("email")
+                                    + ConfigReader.get("NOTES_EMAIL")
                                     + "\","
                                     + "\"password\":\""
-                                    + ConfigReader.getProperty("password")
+                                    + ConfigReader.get("NOTES_PASSWORD")
                                     + "\""
                                     + "}";
         setupApi();
