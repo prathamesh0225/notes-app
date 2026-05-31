@@ -30,6 +30,16 @@ pipeline {
                 }
             }
         }
+
+        stage('Clean Old Reports') {
+            steps {
+                bat '''
+                if exist report rmdir /s /q report
+                if exist test.jtl del test.jtl
+                '''
+            }
+        }
+        
         stage('Run JMeter Test') {
             steps {
                 catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
@@ -42,19 +52,6 @@ pipeline {
             }
         }
 
-        stage('Generate HTML Report') {
-            steps {
-                catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
-                    bat '''
-                    if exist report rmdir /s /q report
-                    jmeter -g performance/results/result.jtl ^
-                    -o report
-                    '''
-                }
-            }
-        }
-
-
         stage('Publish Allure') {
 
             steps {
@@ -66,6 +63,19 @@ pipeline {
 
                     results: [[path:'target/allure-results']]
                 )
+            }
+        }
+
+        stage('Publish Report') {
+            steps {
+                publishHTML([
+                    reportDir: 'report',
+                    reportFiles: 'index.html',
+                    reportName: 'JMeter Report',
+                    keepAll: true,
+                    alwaysLinkToLastBuild: true,
+                    allowMissing: true
+                ])
             }
         }
 
