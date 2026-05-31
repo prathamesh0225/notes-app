@@ -3,3 +3,8 @@ screenshots/
 config.properties
 task_remain.md
 .env
+
+performance/results/
+report/
+*.jtl
+jmeter.log
