@@ -49,7 +49,7 @@ pipeline {
 
                 del /f /q performance\\results\\result.jtl
 
-                jmeter -n ^
+                "%JMETER%\\jmeter.bat" -n ^
                 -t performance/notes-performance.jmx ^
                 -l performance/results/result.jtl
                 '''
