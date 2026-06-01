@@ -25,7 +25,7 @@ public class GeminiHealingAgent {
         System.out.println("Gemini key loaded = " + API_KEY);
         }
 
-    private static final String URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=" + API_KEY;
+    private static final String URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=" + API_KEY;
     private static final MediaType JSON = MediaType.get("application/json");
     private final OkHttpClient client = new OkHttpClient();
 
