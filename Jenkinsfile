@@ -41,52 +41,10 @@ pipeline {
                 )
             }
         }
-
-        stage('Run JMeter Test') {
-            steps {
-                bat '''
-                if not exist performance\\results mkdir performance\\results
-
-                del /f /q performance\\results\\result.jtl
-
-                "%JMETER%\\jmeter.bat" -n ^
-                -t performance/notes-performance.jmx ^
-                -l performance/results/result.jtl
-                '''
-            }
-        }
-
-        stage('Generate JMeter HTML Report') {
-            steps {
-                bat '''
-                if exist report rmdir /s /q report
-
-                jmeter -g performance/results/result.jtl ^
-                -o report
-                '''
-            }
-        }
-
-        stage('Publish Report') {
-            steps {
-                publishHTML([
-                    reportDir: 'report',
-                    reportFiles: 'index.html',
-                    reportName: 'JMeter Report',
-                    keepAll: true,
-                    alwaysLinkToLastBuild: true,
-                    allowMissing: true
-                ])
-            }
-        }
     }
 
     post {
         always {
-
-            echo 'Archiving screenshots...'
-            archiveArtifacts artifacts: 'target/screenshots/**', allowEmptyArchive: true
-
             echo 'Archiving Allure results...'
             archiveArtifacts artifacts: 'allure-results/**', allowEmptyArchive: true
 
@@ -94,11 +52,8 @@ pipeline {
             archiveArtifacts artifacts: 'target/surefire-reports/**', allowEmptyArchive: true
 
             junit testResults: 'target/surefire-reports/*.xml', allowEmptyResults: true
-
-            echo 'Archiving JMeter results and report...'
-            archiveArtifacts artifacts: 'performance/results/*.jtl', allowEmptyArchive: true
-            archiveArtifacts artifacts: 'report/**', allowEmptyArchive: true
-        }
+            
+            }
 
         success {
             echo 'Build passed'
